@@ -6,8 +6,14 @@
   </comment>
   <projects>
     <project>com.idega.core</project>
+    <project>com.idega.user</project>
+    <project>com.idega.block.process</project>
+    <project>com.idega.block.navigation</project>
     <project>com.idega.block.school</project>
     <project>se.idega.idegaweb.commune</project>
+    <project>se.idega.idegaweb.commune.care</project>
+    <project>se.idega.idegaweb.commune.accounting</project>
+    <project>se.idega.idegaweb.commune.school</project>
   </projects>
   <buildSpec>
     <buildCommand>
