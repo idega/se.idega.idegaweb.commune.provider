@@ -1,0 +1,21 @@
+#Fri Oct 24 16:55:48 CEST 2003
+=
+cancel=Avbryt
+delete_group=Ta bort grupp
+edit_group=Editera grupp
+group_name=Namn
+group_type=Typ
+iw.component.se.idega.idegaweb.commune.provider.presentation.SchoolGroupEditor.name=Editera skolgrupper
+main_group=Huvudgrupp
+new_group=Skapa ny grupp
+save_group=Spara grupp
+school.no_provider_found=Ingen anordnare hittad f\u00F6r vald anv\u00E4ndare
+school.proceed_with_locked_marking=
+school.season=L\u00E4s\u00E5r
+school.year=\u00C5r
+school_choice.NO=
+school_season=L\u00E4s\u00E5r
+school_years=Skol\u00E5r
+sub_group=Undergrupp
+teacher=L\u00E4rare
+teachers=L\u00E4rare
