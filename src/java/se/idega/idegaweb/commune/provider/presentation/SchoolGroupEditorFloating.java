@@ -29,14 +29,14 @@ public class SchoolGroupEditorFloating extends SchoolGroupEditorAdmin {
 
 		table.add(getNavigationForm(false), 1, 1);		
 		
-		if (_provider != null){
+		if (this._provider != null){
 			table.add(getGroupTable(), 1, 3);
 			
 			Link createLink = new Link(localize("school.create_group", "Create group"));
 			createLink.setAsImageButton(true);
-			createLink.addParameter(PARAMETER_ACTION, ACTION_EDIT);
+			createLink.addParameter(this.PARAMETER_ACTION, ACTION_EDIT);
 			createLink.addParameter(getProviderAsParameter());
-			createLink.addParameter(PARAMETER_TYPE_ID, _iwc.getParameter(PARAMETER_TYPE_ID));
+			createLink.addParameter(PARAMETER_TYPE_ID, this._iwc.getParameter(PARAMETER_TYPE_ID));
 			table.add(createLink, 1, 5);
 
 		}
@@ -44,7 +44,7 @@ public class SchoolGroupEditorFloating extends SchoolGroupEditorAdmin {
 	}
 
 	protected void setSelectedSchoolType(DropdownMenu types) {
-			types.setSelectedElement(_iwc.getParameter(PARAMETER_TYPE_ID));
+			types.setSelectedElement(this._iwc.getParameter(PARAMETER_TYPE_ID));
 	}
 	
 	protected void setSelectedSeason(DropdownMenu seasons) {				

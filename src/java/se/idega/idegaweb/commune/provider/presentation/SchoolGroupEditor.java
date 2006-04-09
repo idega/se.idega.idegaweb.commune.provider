@@ -58,10 +58,10 @@ public class SchoolGroupEditor extends ProviderBlock {
 	private final String PARAMETER_IS_SUBGROUP = "sge_is_subgroup";
 	
 	public static final int ACTION_CLOSE = 0;
-	public final int ACTION_VIEW = 1;
-	protected final int ACTION_EDIT = 2;
-	private final int ACTION_DELETE = 3;
-	private final int ACTION_SAVE = 4;
+	public static final int ACTION_VIEW = 1;
+	protected static final int ACTION_EDIT = 2;
+	private static final int ACTION_DELETE = 3;
+	private static final int ACTION_SAVE = 4;
 	
 	private int _action = ACTION_VIEW;
 	private int _groupID = -1;
@@ -77,11 +77,11 @@ public class SchoolGroupEditor extends ProviderBlock {
 	//public final String PARAMETER_PROVIDER_ID = "Goran please fix this, ACTION_VIEW and PARAMETER_ACTION";
 	
 	public boolean getUseGroupStringId() {
-		return useGroupStringId;
+		return this.useGroupStringId;
 	}
 
 	public void setUseGroupStringId(boolean b) {
-		useGroupStringId = b;
+		this.useGroupStringId = b;
 	}
 	
 	/* (non-Javadoc)
@@ -89,11 +89,11 @@ public class SchoolGroupEditor extends ProviderBlock {
 	 */
 	public void init(IWContext iwc) throws Exception {
 		try {
-			_provider = getProvider();
+			this._provider = getProvider();
 			parseAction(iwc);
 			
 
-			switch (_action) {
+			switch (this._action) {
 				case ACTION_VIEW :
 					add(getOverview());
 					break;
@@ -133,14 +133,14 @@ public class SchoolGroupEditor extends ProviderBlock {
 		table.setHeight(4, 12);
 		table.setWidth(getWidth());
 		
-		table.add(getNavigationForm(showStudyPaths), 1, 1);
+		table.add(getNavigationForm(this.showStudyPaths), 1, 1);
 		
-		if (_provider != null){
+		if (this._provider != null){
 			table.add(getGroupTable(), 1, 3);
 			
 			GenericButton button = getButton(new GenericButton("edit", localize("new_group", "New group")));
 			button.setPageToOpen(getParentPageID());
-			button.addParameterToPage(PARAMETER_ACTION, ACTION_EDIT);
+			button.addParameterToPage(this.PARAMETER_ACTION, ACTION_EDIT);
 			Parameter providerPar = getProviderAsParameter();
 			button.addParameterToPage(providerPar.getName(), providerPar.getValueAsString());
 			table.setCellpaddingLeft(1, 5, 12);
@@ -163,16 +163,16 @@ public class SchoolGroupEditor extends ProviderBlock {
 		boolean canDelete = true;
 		
 		table.add(getLocalizedSmallHeader("group_name","Name"), column++, row);
-		if (!showStudyPaths) {
+		if (!this.showStudyPaths) {
 			table.add(getLocalizedSmallHeader("group_type","Type"), column++, row);
 		}
 		table.add(getLocalizedSmallHeader("school_season","Season"), column++, row);
 		table.add(getLocalizedSmallHeader("school_years","Years"), column++, row);
 		table.add(getLocalizedSmallHeader("teachers","Teachers"), column++, row);
-		if (showStudyPaths) {
+		if (this.showStudyPaths) {
 			table.add(getLocalizedSmallHeader("study_paths","Study paths"), column++, row);
 		}
-		if (useStyleNames) {
+		if (this.useStyleNames) {
 			table.setRowStyleClass(row, getHeaderRow2Class());
 			table.setCellpaddingLeft(1, row++, 12);
 		}
@@ -185,7 +185,7 @@ public class SchoolGroupEditor extends ProviderBlock {
 		while (iter.hasNext()) {
 			column = 1;
 			SchoolClass group = (SchoolClass) iter.next();
-			if (showStudyPaths) {
+			if (this.showStudyPaths) {
 				try {
 					studyPaths = group.findRelatedStudyPaths();
 				}
@@ -208,31 +208,39 @@ public class SchoolGroupEditor extends ProviderBlock {
 				e1.printStackTrace();
 			}
 				
-			if (useStyleNames) {
+			if (this.useStyleNames) {
 				table.setCellpaddingLeft(1, row, 12);
-				if (row % 2 == 0)
+				if (row % 2 == 0) {
 					table.setRowStyleClass(row, getDarkRowClass());
-				else
+				}
+				else {
 					table.setRowStyleClass(row, getLightRowClass());
+				}
 			}
 			else {
-				if (row % 2 == 0)
+				if (row % 2 == 0) {
 					table.setRowColor(row, getZebraColor1());
-				else
+				}
+				else {
 					table.setRowColor(row, getZebraColor2());
+				}
 			}
 
 			table.add(getSmallText(group.getSchoolClassName()), column++, row);
-			if (!showStudyPaths) {
-				if (group.getSchoolTypeId() != -1)
+			if (!this.showStudyPaths) {
+				if (group.getSchoolTypeId() != -1) {
 					table.add(getSmallText(group.getSchoolType().getSchoolTypeName()), column++, row);
-				else
+				}
+				else {
 					table.add(getSmallText("-"), column++, row);
+				}
 			}
-			if (group.getSchoolSeasonId() != -1)
+			if (group.getSchoolSeasonId() != -1) {
 				table.add(getSmallText(group.getSchoolSeason().getSchoolSeasonName()), column++, row);
-			else
+			}
+			else {
 				table.add(getSmallText("-"), column++, row);
+			}
 			
 			List years = null;
 			try {
@@ -249,8 +257,9 @@ public class SchoolGroupEditor extends ProviderBlock {
 				while (iterator.hasNext()) {
 					SchoolYear year = (SchoolYear) iterator.next();
 					buffer.append(year.getSchoolYearName());
-					if (iterator.hasNext())
+					if (iterator.hasNext()) {
 						buffer.append(",").append(Text.NON_BREAKING_SPACE);
+					}
 				}
 				table.add(getSmallText(buffer.toString()), column++, row);
 			}
@@ -272,8 +281,9 @@ public class SchoolGroupEditor extends ProviderBlock {
 				while (iterator.hasNext()) {
 					User teacher = (User) iterator.next();
 					buffer.append(teacher.getLastName());
-					if (iterator.hasNext())
+					if (iterator.hasNext()) {
 						buffer.append(",").append(Text.NON_BREAKING_SPACE);
+					}
 				}
 				table.add(getSmallText(buffer.toString()), column++, row);
 			}
@@ -281,15 +291,16 @@ public class SchoolGroupEditor extends ProviderBlock {
 				table.add(getSmallText("-"), column++, row);
 			}
 			
-			if (showStudyPaths) {
+			if (this.showStudyPaths) {
 				if (!studyPaths.isEmpty()) {
 					Iterator iterator = studyPaths.iterator();
 					StringBuffer buffer = new StringBuffer();
 					while (iterator.hasNext()) {
 						SchoolStudyPath studyPath = (SchoolStudyPath) iterator.next();
 						buffer.append(localize(studyPath.getCode(), studyPath.getDescription()));
-						if (iterator.hasNext())
+						if (iterator.hasNext()) {
 							buffer.append(",").append(Text.NON_BREAKING_SPACE);
+						}
 					}
 					table.add(getSmallText(buffer.toString()), column++, row);
 				}
@@ -299,15 +310,15 @@ public class SchoolGroupEditor extends ProviderBlock {
 			}
 			
 			Link editLink = new Link(this.getEditIcon(localize("edit_group", "Edit group")));
-			editLink.addParameter(PARAMETER_ACTION, ACTION_EDIT);
-			editLink.addParameter(PARAMETER_GROUP_ID, group.getPrimaryKey().toString());
+			editLink.addParameter(this.PARAMETER_ACTION, ACTION_EDIT);
+			editLink.addParameter(this.PARAMETER_GROUP_ID, group.getPrimaryKey().toString());
 			editLink.addParameter(getProviderAsParameter());
 			table.add(editLink, column++, row);
 
 			Link deleteLink = new Link(this.getDeleteIcon(localize("delete_group", "Delete group")));
 			if (canDelete) {
-				deleteLink.addParameter(PARAMETER_ACTION, ACTION_DELETE);
-				deleteLink.addParameter(PARAMETER_GROUP_ID, group.getPrimaryKey().toString());
+				deleteLink.addParameter(this.PARAMETER_ACTION, ACTION_DELETE);
+				deleteLink.addParameter(this.PARAMETER_GROUP_ID, group.getPrimaryKey().toString());
 				deleteLink.addParameter(getProviderAsParameter());
 			}
 			else {
@@ -325,8 +336,8 @@ public class SchoolGroupEditor extends ProviderBlock {
 	
 	protected Form getEditForm() {
 		Form form = new Form();
-		form.addParameter(PARAMETER_GROUP_ID, _groupID);
-		form.addParameter(PARAMETER_ACTION, -1);
+		form.addParameter(this.PARAMETER_GROUP_ID, this._groupID);
+		form.addParameter(this.PARAMETER_ACTION, -1);
 		form.maintainParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID);
 		
 		Table table = new Table();
@@ -341,13 +352,14 @@ public class SchoolGroupEditor extends ProviderBlock {
 		int row = 1;
 		SelectorUtility util = new SelectorUtility();
 		
-		if (useGroupStringId) {
+		if (this.useGroupStringId) {
 			table.add(getSmallHeader(localize("group_string_id", "Group ID") + ":"), 1, row);			
 			table.setNoWrap(1, row);
-			TextInput groupStringId = (TextInput) getStyledInterface(new TextInput(PARAMETER_GROUP_STRING_ID));
-			if (_group != null && _group.getGroupStringId() != null)
-				groupStringId.setContent(_group.getGroupStringId());
-			if (useStyleNames) {
+			TextInput groupStringId = (TextInput) getStyledInterface(new TextInput(this.PARAMETER_GROUP_STRING_ID));
+			if (this._group != null && this._group.getGroupStringId() != null) {
+				groupStringId.setContent(this._group.getGroupStringId());
+			}
+			if (this.useStyleNames) {
 				table.setCellpaddingLeft(1, row, 12);
 			}
 			groupStringId.setAsNotEmpty(localize("group_id_not_empty", "Group ID must be entered."));
@@ -355,12 +367,13 @@ public class SchoolGroupEditor extends ProviderBlock {
 		}
 		table.add(getSmallHeader(localize("group_name", "Name") + ":"), 1, row);
 		table.setNoWrap(1, row);
-		TextInput name = (TextInput) getStyledInterface(new TextInput(PARAMETER_GROUP_NAME));
+		TextInput name = (TextInput) getStyledInterface(new TextInput(this.PARAMETER_GROUP_NAME));
 		name.setAsNotEmpty(localize("must_supply_group_name", "You must enter a group name."));
 			
-		if (_group != null && _group.getSchoolClassName() != null)
-			name.setContent(_group.getSchoolClassName());
-		if (useStyleNames) {
+		if (this._group != null && this._group.getSchoolClassName() != null) {
+			name.setContent(this._group.getSchoolClassName());
+		}
+		if (this.useStyleNames) {
 			table.setCellpaddingLeft(1, row, 12);
 		}
 		table.add(name, 3, row++);
@@ -369,7 +382,7 @@ public class SchoolGroupEditor extends ProviderBlock {
 		table.setNoWrap(1, row);
 		Collection providerTypes = null;
 		try {
-			providerTypes = _provider.findRelatedSchoolTypes();
+			providerTypes = this._provider.findRelatedSchoolTypes();
 		}
 		catch (IDORelationshipException e) {
 			providerTypes = new ArrayList();
@@ -377,7 +390,7 @@ public class SchoolGroupEditor extends ProviderBlock {
 		DropdownMenu types = (DropdownMenu) getStyledInterface(util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_TYPE_ID), providerTypes, "getSchoolTypeName"));
 		types.addMenuElementFirst("-1", "");
 		setSelectedSchoolType(types);
-		if (useStyleNames) {
+		if (this.useStyleNames) {
 			table.setCellpaddingLeft(1, row, 12);
 		}
 		table.add(types, 3, row++);
@@ -391,40 +404,42 @@ public class SchoolGroupEditor extends ProviderBlock {
 		catch (RemoteException e) {
 			providerSeasons = new ArrayList();
 		}
-		DropdownMenu seasons = (DropdownMenu) getStyledInterface(util.getSelectorFromIDOEntities(new DropdownMenu(PARAMETER_SEASON_ID), providerSeasons, "getSchoolSeasonName"));
+		DropdownMenu seasons = (DropdownMenu) getStyledInterface(util.getSelectorFromIDOEntities(new DropdownMenu(this.PARAMETER_SEASON_ID), providerSeasons, "getSchoolSeasonName"));
 		seasons.addMenuElementFirst("-1", "");
 		setSelectedSeason(seasons);
-		if (useStyleNames) {
+		if (this.useStyleNames) {
 			table.setCellpaddingLeft(1, row, 12);
 		}
 		table.add(seasons, 3, row++);
 		
 		table.add(getSmallHeader(localize("group_type", "Group type") + ":"), 1, row);
 		table.setNoWrap(1, row);
-		DropdownMenu subGroup = (DropdownMenu) getStyledInterface(new DropdownMenu(PARAMETER_IS_SUBGROUP));
+		DropdownMenu subGroup = (DropdownMenu) getStyledInterface(new DropdownMenu(this.PARAMETER_IS_SUBGROUP));
 		subGroup.addMenuElement("false", localize("main_group", "Main group"));
 		subGroup.addMenuElement("true", localize("sub_group", "Sub group"));
-		if (_group != null)
-			subGroup.setSelectedElement(String.valueOf(_group.getIsSubGroup()));
-		if (useStyleNames) {
+		if (this._group != null) {
+			subGroup.setSelectedElement(String.valueOf(this._group.getIsSubGroup()));
+		}
+		if (this.useStyleNames) {
 			table.setCellpaddingLeft(1, row, 12);
 		}
 		table.add(subGroup, 3, row++);
 		
 		List schoolYears = null;
 		try {
-			schoolYears = new ArrayList(_provider.findRelatedSchoolYears());
+			schoolYears = new ArrayList(this._provider.findRelatedSchoolYears());
 		}
 		catch (IDORelationshipException e1) {
 			schoolYears = new ArrayList();
 		}
-		if (!schoolYears.isEmpty())
+		if (!schoolYears.isEmpty()) {
 			Collections.sort(schoolYears, new SchoolYearComparator());
+		}
 		
 		Collection groupYears = new ArrayList();
-		if (_group != null) {
+		if (this._group != null) {
 			try {
-				groupYears = _group.findRelatedSchoolYears();
+				groupYears = this._group.findRelatedSchoolYears();
 			}
 			catch (IDORelationshipException e2) {
 				groupYears = new ArrayList();
@@ -434,16 +449,17 @@ public class SchoolGroupEditor extends ProviderBlock {
 		table.setHeight(row++, 15);
 		table.add(getSmallHeader(localize("school_years", "Years") + ":"), 1, row);
 		table.setNoWrap(1, row);
-		if (useStyleNames) {
+		if (this.useStyleNames) {
 			table.setCellpaddingLeft(1, row, 12);
 		}
 		
 		Iterator iter = schoolYears.iterator();
 		while (iter.hasNext()) {
 			SchoolYear year = (SchoolYear) iter.next();
-			CheckBox box = getCheckBox(PARAMETER_SCHOOL_YEARS, year.getPrimaryKey().toString());
-			if (groupYears.contains(year))
+			CheckBox box = getCheckBox(this.PARAMETER_SCHOOL_YEARS, year.getPrimaryKey().toString());
+			if (groupYears.contains(year)) {
 				box.setChecked(true);
+			}
 			
 			table.setCellpadding(3, row, 2);
 			table.add(box, 3, row);
@@ -453,19 +469,19 @@ public class SchoolGroupEditor extends ProviderBlock {
 		table.setHeight(row++, 15);
 		
 		//Study paths
-		if (showStudyPaths) {
+		if (this.showStudyPaths) {
 			List paths = null;
 			try {
-				paths = new ArrayList(_provider.findRelatedStudyPaths());
+				paths = new ArrayList(this._provider.findRelatedStudyPaths());
 			}
 			catch (IDORelationshipException e1) {
 				paths = new ArrayList();
 			}
 			
 			Collection studyPaths = new ArrayList();
-			if (_group != null) {
+			if (this._group != null) {
 				try {
-					studyPaths = _group.findRelatedStudyPaths();
+					studyPaths = this._group.findRelatedStudyPaths();
 				}
 				catch (IDORelationshipException e2) {
 					studyPaths = new ArrayList();
@@ -475,16 +491,17 @@ public class SchoolGroupEditor extends ProviderBlock {
 			table.setHeight(row++, 15);
 			table.add(getSmallHeader(localize("study_paths", "Study paths") + ":"), 1, row);
 			table.setNoWrap(1, row);
-			if (useStyleNames) {
+			if (this.useStyleNames) {
 				table.setCellpaddingLeft(1, row, 12);
 			}
 			
 			iter = paths.iterator();
 			while (iter.hasNext()) {
 				SchoolStudyPath path = (SchoolStudyPath) iter.next();
-				CheckBox box = getCheckBox(PARAMETER_STUDY_PATHS, path.getPrimaryKey().toString());
-				if (studyPaths.contains(path))
+				CheckBox box = getCheckBox(this.PARAMETER_STUDY_PATHS, path.getPrimaryKey().toString());
+				if (studyPaths.contains(path)) {
 					box.setChecked(true);
+				}
 				
 				table.setCellpadding(3, row, 2);
 				table.add(box, 3, row);
@@ -499,14 +516,14 @@ public class SchoolGroupEditor extends ProviderBlock {
 		link.setAsImageButton(true);
 		link.setWindowToOpen(com.idega.block.school.presentation.SchoolUserWindow.class);
 		link.setParameter("sue_act", "sue_pvs");
-		link.setParameter("pr_schl_id", _provider.getPrimaryKey().toString());
+		link.setParameter("pr_schl_id", this._provider.getPrimaryKey().toString());
 		
 		table.add(link, 3, row++);
 
 		List groupTeachers = new ArrayList();
-		if (_group != null) {
+		if (this._group != null) {
 			try {
-				groupTeachers = new ArrayList(_group.findRelatedUsers());
+				groupTeachers = new ArrayList(this._group.findRelatedUsers());
 			}
 			catch (IDORelationshipException e2) {
 				groupTeachers = new ArrayList();
@@ -519,11 +536,11 @@ public class SchoolGroupEditor extends ProviderBlock {
 			if (a == 0) {
 				table.add(getSmallHeader(localize("teacher", "Teacher") + ":"), 1, row);
 				table.setNoWrap(1, row);
-				if (useStyleNames) {
+				if (this.useStyleNames) {
 					table.setCellpaddingLeft(1, row, 12);
 				}
 			}
-			chooser = new SchoolUserChooser(PARAMETER_TEACHERS+"_"+(a+1), _provider);
+			chooser = new SchoolUserChooser(this.PARAMETER_TEACHERS+"_"+(a+1), this._provider);
 
 			if (a < size) {
 				User teacher = (User) groupTeachers.get(a);
@@ -531,43 +548,45 @@ public class SchoolGroupEditor extends ProviderBlock {
 			}
 			table.add(chooser, 3, row++);
 			
-			if ((a + 1) < 4)
+			if ((a + 1) < 4) {
 				table.setHeight(row++, 3);
+			}
 		}
 				
 		table.setHeight(row++, 12);
-		if (useStyleNames) {
+		if (this.useStyleNames) {
 			table.setCellpaddingLeft(1, row, 12);
 		}
 		table.mergeCells(1, row, 3, row);
 		SubmitButton save = (SubmitButton) getButton(new SubmitButton(localize("save_group", "Save group")));
-		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
+		save.setValueOnClick(this.PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		table.add(save, 1, row);
 		table.add(Text.getNonBrakingSpace(), 1, row);
 		//ac okt 2005
-		cancel = (CloseButton) getStyledInterface(new CloseButton(localize("close_window", "Close")));
-		cancel.setPageToOpen(getParentPageID());
-		cancel.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_CLOSE));
-		table.add(cancel, 1, row);
+		this.cancel = (CloseButton) getStyledInterface(new CloseButton(localize("close_window", "Close")));
+		this.cancel.setPageToOpen(getParentPageID());
+		this.cancel.setValueOnClick(this.PARAMETER_ACTION, String.valueOf(ACTION_CLOSE));
+		table.add(this.cancel, 1, row);
 		
 		return form;
 	}
 
 	protected void setSelectedSchoolType(DropdownMenu types) {
-		if (_group != null && _group.getSchoolTypeId() != -1)
-			types.setSelectedElement(_group.getSchoolTypeId());
+		if (this._group != null && this._group.getSchoolTypeId() != -1) {
+			types.setSelectedElement(this._group.getSchoolTypeId());
+		}
 	}
 
 	protected void setSelectedSeason(DropdownMenu seasons) {
-		if (_group != null && _group.getSchoolSeasonId() != -1){
-			seasons.setSelectedElement(_group.getSchoolSeasonId());
+		if (this._group != null && this._group.getSchoolSeasonId() != -1){
+			seasons.setSelectedElement(this._group.getSchoolSeasonId());
 			seasons.setDisabled(true);
 		}
 	}
 	
 	private void deleteGroup() {
 		try {
-			getSchoolBusiness().removeSchoolClass(_groupID);
+			getSchoolBusiness().removeSchoolClass(this._groupID);
 		}
 		catch (RemoteException e) {
 			e.printStackTrace();
@@ -575,32 +594,35 @@ public class SchoolGroupEditor extends ProviderBlock {
 	}
 	
 	private void saveGroup(IWContext iwc) {
-		String groupStringId = iwc.getParameter(PARAMETER_GROUP_STRING_ID);
-		String name = iwc.getParameter(PARAMETER_GROUP_NAME);
+		String groupStringId = iwc.getParameter(this.PARAMETER_GROUP_STRING_ID);
+		String name = iwc.getParameter(this.PARAMETER_GROUP_NAME);
 		if (name.trim().length() == 0) {
 			getParentPage().setAlertOnLoad(localize("empty_name_value", "Can not store group with empty name value"));
 			return;
 		}
-		String[] years = iwc.getParameterValues(PARAMETER_SCHOOL_YEARS);
-		String[] studyPaths = iwc.getParameterValues(PARAMETER_STUDY_PATHS);
+		String[] years = iwc.getParameterValues(this.PARAMETER_SCHOOL_YEARS);
+		String[] studyPaths = iwc.getParameterValues(this.PARAMETER_STUDY_PATHS);
 		String[] teachers = new String[4];
 		int typeID = -1;
-		if (iwc.isParameterSet(PARAMETER_TYPE_ID))
+		if (iwc.isParameterSet(PARAMETER_TYPE_ID)) {
 			typeID = Integer.parseInt(iwc.getParameter(PARAMETER_TYPE_ID));
+		}
 		int seasonID = -1;
-		if (iwc.isParameterSet(PARAMETER_SEASON_ID))
-			seasonID = Integer.parseInt(iwc.getParameter(PARAMETER_SEASON_ID));
-		boolean isSubGroup = Boolean.valueOf(iwc.getParameter(PARAMETER_IS_SUBGROUP)).booleanValue();
+		if (iwc.isParameterSet(this.PARAMETER_SEASON_ID)) {
+			seasonID = Integer.parseInt(iwc.getParameter(this.PARAMETER_SEASON_ID));
+		}
+		boolean isSubGroup = Boolean.valueOf(iwc.getParameter(this.PARAMETER_IS_SUBGROUP)).booleanValue();
 		
 		for (int a = 1; a <= 4; a++) {
 			String teacher = "-1";
-			if (iwc.isParameterSet(PARAMETER_TEACHERS+"_"+a))
-				teacher = iwc.getParameter(PARAMETER_TEACHERS+"_"+a);
+			if (iwc.isParameterSet(this.PARAMETER_TEACHERS+"_"+a)) {
+				teacher = iwc.getParameter(this.PARAMETER_TEACHERS+"_"+a);
+			}
 			teachers[a-1] = teacher;
 		}
 		
 		try {
-			SchoolClass schoolClass = getSchoolBusiness().storeSchoolClass(_groupID, name, getProviderID(), typeID, seasonID, years, teachers, studyPaths, groupStringId);
+			SchoolClass schoolClass = getSchoolBusiness().storeSchoolClass(this._groupID, name, getProviderID(), typeID, seasonID, years, teachers, studyPaths, groupStringId);
 			schoolClass.setIsSubGroup(isSubGroup);
 			schoolClass.store();
 		}
@@ -621,28 +643,30 @@ public class SchoolGroupEditor extends ProviderBlock {
 	private boolean multipleSchools = false;
 	
 	public void setMultipleSchools(boolean multiple) {
-		multipleSchools = multiple;
+		this.multipleSchools = multiple;
 	}
 	
 	public boolean getMultipleSchools() {
-		return multipleSchools;
+		return this.multipleSchools;
 	}	
 
 	/**
 	 * @param iwc
 	 */
 	private void parseAction(IWContext iwc) {
-		if (iwc.isParameterSet(PARAMETER_ACTION))
-			_action = Integer.parseInt(iwc.getParameter(PARAMETER_ACTION));
-		if (iwc.isParameterSet(PARAMETER_GROUP_ID))
-			_groupID = Integer.parseInt(iwc.getParameter(PARAMETER_GROUP_ID));
+		if (iwc.isParameterSet(this.PARAMETER_ACTION)) {
+			this._action = Integer.parseInt(iwc.getParameter(this.PARAMETER_ACTION));
+		}
+		if (iwc.isParameterSet(this.PARAMETER_GROUP_ID)) {
+			this._groupID = Integer.parseInt(iwc.getParameter(this.PARAMETER_GROUP_ID));
+		}
 		
-		if (_groupID != -1) {
+		if (this._groupID != -1) {
 			try {
-				_group = getSchoolBusiness().findSchoolClass(new Integer(_groupID));
+				this._group = getSchoolBusiness().findSchoolClass(new Integer(this._groupID));
 			}
 			catch (RemoteException e) {
-				_group = null;
+				this._group = null;
 			}
 		}
 	}

@@ -43,8 +43,8 @@ public abstract class ProviderBlock extends CommuneBlock {
 
 	public void main(IWContext iwc) throws Exception{
 		setResourceBundle(getResourceBundle(iwc));
-		_session = getProviderSession(iwc);
-		_schoolBusiness = getSchoolBusiness(iwc);
+		this._session = getProviderSession(iwc);
+		this._schoolBusiness = getSchoolBusiness(iwc);
 
 		init(iwc);
 	}
@@ -126,8 +126,9 @@ public abstract class ProviderBlock extends CommuneBlock {
 		DropdownMenu seasons = (DropdownMenu) getStyledInterface(selector.getSelectorFromIDOEntities(new DropdownMenu(getSession().getParameterSeasonID()), getSchoolBusiness().findAllSchoolSeasons(getSchoolBusiness().getCategoryElementarySchool()), "getSchoolSeasonName"));
 		seasons.addMenuElementFirst("-1","");
 		seasons.setToSubmit();
-		if (getSession().getSeasonID() != -1)
+		if (getSession().getSeasonID() != -1) {
 			seasons.setSelectedElement(getSession().getSeasonID());
+		}
 		table.add(seasons, 2, row);
 		
 		table.add(getSmallHeader(localize("school.year","Year")+":"+Text.NON_BREAKING_SPACE),4,row);
@@ -136,8 +137,9 @@ public abstract class ProviderBlock extends CommuneBlock {
 		DropdownMenu years = (DropdownMenu) getStyledInterface(selector.getSelectorFromIDOEntities(new DropdownMenu(getSession().getParameterYearID()), schoolYears, "getSchoolYearName"));
 		years.addMenuElementFirst("-1","");
 		years.setToSubmit();
-		if (getSession().getYearID() != -1)
+		if (getSession().getYearID() != -1) {
 			years.setSelectedElement(getSession().getYearID());
+		}
 		table.add(years,5,row);
 		
 		if (showStudyPaths) {
@@ -148,8 +150,9 @@ public abstract class ProviderBlock extends CommuneBlock {
 				DropdownMenu paths = (DropdownMenu) getStyledInterface(selector.getSelectorFromIDOEntities(new DropdownMenu(getSession().getParameterStudyPathID()), studyPaths, "getCode", getResourceBundle()));
 				paths.addMenuElementFirst("-1","");
 				paths.setToSubmit();
-				if (getSession().getStudyPathID() != -1)
+				if (getSession().getStudyPathID() != -1) {
 					paths.setSelectedElement(getSession().getStudyPathID());
+				}
 				table.add(paths,8,row);
 			}
 			catch (FinderException fe) {

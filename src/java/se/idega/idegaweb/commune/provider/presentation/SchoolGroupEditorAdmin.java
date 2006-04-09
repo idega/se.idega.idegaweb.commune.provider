@@ -47,8 +47,8 @@ public class SchoolGroupEditorAdmin extends SchoolGroupEditor {
 	
 	
 	public void init(IWContext iwc) throws Exception {
-		_iwc = iwc;
-		_centralAdmin = iwc.getParameter(PARAM_BUNADM) != null && iwc.getParameter(PARAM_BUNADM).equals("true");
+		this._iwc = iwc;
+		this._centralAdmin = iwc.getParameter(PARAM_BUNADM) != null && iwc.getParameter(PARAM_BUNADM).equals("true");
 		super.init(iwc); 
 	}	
 	
@@ -57,7 +57,7 @@ public class SchoolGroupEditorAdmin extends SchoolGroupEditor {
 	 */
 	protected School getProvider() throws RemoteException, FinderException{
 		SchoolHome home = (SchoolHome) IDOLookup.getHome(School.class);
-		String id = _iwc.getParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID);
+		String id = this._iwc.getParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID);
 		if (id != null && ! id.equals("-1")) {
 			return home.findByPrimaryKey(id);			
 		}
@@ -85,8 +85,8 @@ public class SchoolGroupEditorAdmin extends SchoolGroupEditor {
 	 * Returns a Parameter containing the current selected provider
 	 */
 	Parameter getProviderAsParameter(){
-		if (_iwc.getParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID) != null){
-			return new Parameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID,  _iwc.getParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID));
+		if (this._iwc.getParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID) != null){
+			return new Parameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID,  this._iwc.getParameter(SchoolCommuneSessionBean.PARAMETER_SCHOOL_ID));
 		} else {
 			return new Parameter ("", "");
 		}
@@ -99,7 +99,7 @@ public class SchoolGroupEditorAdmin extends SchoolGroupEditor {
 	
 	protected Form getNavigationForm(boolean showStudyPaths) throws RemoteException {
 		Form form = new Form();
-		form.add(getNavigationTable(_iwc, true, true));
+		form.add(getNavigationTable(this._iwc, true, true));
 		
 		try{
 			Form form2 = super.getNavigationForm(false);
@@ -142,7 +142,7 @@ public class SchoolGroupEditorAdmin extends SchoolGroupEditor {
 				RadioButton rb1 = new RadioButton(PARAM_BUNADM, ""+true);
 				RadioButton rb2 = new RadioButton(PARAM_BUNADM, ""+false);		
 						
-				if (_centralAdmin){
+				if (this._centralAdmin){
 					rb1.setSelected();
 				} else{
 					rb2.setSelected();
@@ -162,7 +162,7 @@ public class SchoolGroupEditorAdmin extends SchoolGroupEditor {
 						
 			table.add(getSmallHeader(localize("school.school_list","School")+":"+Text.NON_BREAKING_SPACE),1,row);
 			table.mergeCells(2, row, 8, row);
-			table.add(getSchools(iwc, _centralAdmin, category), 2, row);
+			table.add(getSchools(iwc, this._centralAdmin, category), 2, row);
 			table.setHeight(row, 15);
 		}
 
